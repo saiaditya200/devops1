@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+{% block content %}
+
+<!-- Internal CSS for the Register Page -->
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    h2 {
+        font-size: 28px;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    form {
+        background-color:grey;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 100%;
+    }
+
+    label {
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    input[type="text"], 
+    input[type="password"], 
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Optional: Style for password strength indicator */
+    .password-strength {
+        margin-top: -10px;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .weak {
+        color: red;
+    }
+
+    .medium {
+        color: orange;
+    }
+
+    .strong {
+        color: green;
+    }
+</style>
+
+<h2>Register</h2>
+<form method="POST" action="{{ url_for('register') }}" id="registerForm">
+    <label for="username">Username:</label>
+    <input type="text" name="username" id="username" required><br><br>
+
+    <label for="password">Password:</label>
+    <input type="password" name="password" id="password" required><br><br>
+
+    <p class="password-strength" id="passwordStrength">Password strength: </p>
+
+    <label for="role">Select Role:</label>
+    <select name="role" id="role">
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+    </select><br><br>
+
+    <button type="submit">Register</button>
+</form>
+
+<!-- JavaScript to enhance password validation -->
+<script>
+    const passwordField = document.getElementById('password');
+    const passwordStrength = document.getElementById('passwordStrength');
+
+    passwordField.addEventListener('input', function() {
+        const passwordValue = passwordField.value;
+        let strength = 'weak';
+
+        if (passwordValue.length >= 8 && /[a-z]/.test(passwordValue) && /[A-Z]/.test(passwordValue) && /\d/.test(passwordValue)) {
+            strength = 'strong';
+        } else if (passwordValue.length >= 6 && /[a-z]/.test(passwordValue) && /\d/.test(passwordValue)) {
+            strength = 'medium';
+        }
+
+        passwordStrength.textContent = 'Password strength: ' + strength;
+        passwordStrength.className = 'password-strength ' + strength;
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block title %}Product Details{% endblock %}
+
+{% block content %}
+
+<!-- Internal CSS for Product Details Page -->
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+    }
+
+    h2 {
+        text-align: center;
+        color: #333;
+        margin: 20px 0;
+    }
+
+    .product-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .product {
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        width: 22%;
+        text-align: center;
+        padding: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .product img {
+        width: 100%;
+        height: auto;
+        max-width: 300px;
+        margin-bottom: 10px;
+    }
+
+    .product:hover {
+        transform: scale(1.05);
+    }
+
+    .product p {
+        color: #666;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    form {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    form input[type="text"],
+    form input[type="number"],
+    form textarea {
+        width: 100%;
+        max-width: 400px;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    form button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    form button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Responsive Design for smaller screens */
+    @media (max-width: 1200px) {
+        .product {
+            width: 30%;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .product {
+            width: 45%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .product {
+            width: 90%;
+        }
+    }
+</style>
+
+<h2>{{ product.product_name }}</h2>
+
+<div class="product-container">
+    <div class="product">
+        {% if product.image_url %}
+            <img src="{{ product.image_url }}" alt="{{ product.product_name }}">
+        {% else %}
+            <p>No image available.</p>
+        {% endif %}
+        <p>Category: {{ product.category }}</p>
+        <p>Quantity: {{ product.quantity }}</p>
+        <p>Quality: {{ product.quality }}</p>
+        <p>Price: ${{ product.price }}</p>
+    </div>
+</div>
+
+<h3>Order Product</h3>
+<form method="POST" action="{{ url_for('order_product', product_id=product._id) }}" enctype="multipart/form-data">
+    <label for="name">Name:</label>
+    <input type="text" name="name" required>
+
+    <label for="contact">Contact:</label>
+    <input type="text" name="contact" required>
+
+    <label for="address">Address:</label>
+    <textarea name="address" rows="4" required></textarea>
+
+    <label for="quantity">Quantity:</label>
+    <input type="number" name="quantity" min="1" max="{{ product.quantity }}" required>
+
+    <label for="quality">Quality:</label>
+    <input type="text" name="quality" value="{{ product.quality }}" readonly>
+
+    <label for="price">Price per item:</label>
+    <input type="text" name="price" value="${{ product.price }}" readonly>
+
+    <label for="qr_code">Upload QR Code:</label>
+    <input type="file" name="qr_code" accept="image/*">
+
+    <button type="submit">Place Order</button>
+</form>
+
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+{% endblock %}

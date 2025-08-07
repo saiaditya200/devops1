@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@400;700&display=swap">
+
+    <style>
+        /* Full-screen background image */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Roboto', sans-serif; /* Apply Roboto to body text */
+        }
+
+        .background {
+            background-image: url('{{ url_for('static', filename='images/bc6.png') }}');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .background h1, .background p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .background h1 {
+            font-family: 'Pacifico', cursive; /* Apply Pacifico to heading */
+            font-size: 4em;
+            background: linear-gradient(45deg, #ff6b6b, #f06595, #eeaeca);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: rocket 2s ease-out infinite;
+        }
+
+        .background p {
+            font-size: 2em;
+            color: black;
+        }
+
+        @keyframes rocket {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+
+        .links {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+        }
+
+        .links a {
+            text-decoration: none;
+            font-size: 1.2em;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .links .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            background-color: #007bff;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .links .btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="background">
+        <div class="content">
+            <h1 id="title">Title 1</h1>
+            <p id="description">Description 1</p>
+        </div>
+    </div>
+    <div class="links">
+        <a href="{{ url_for('about') }}" class="btn">About</a>
+        <a href="{{ url_for('services') }}" class="btn">Services</a>
+        <a href="{{ url_for('contact') }}" class="btn">Contact</a>
+        <a href="{{ url_for('register') }}" class="btn">Register</a>
+        <a href="{{ url_for('login') }}" class="btn">Login</a>
+    </div>
+
+    <script>
+        // Array of titles and descriptions
+        const titles = [
+            'Fresh Organic Apples',
+            'Hand-Picked Strawberries',
+            'Naturally Sweet Carrots',
+            'Organic Kale Bunch',
+            'Farm-Fresh Tomatoes'
+        ];
+
+        const descriptions = [
+            'Crisp, juicy, and naturally sweet, our organic apples are grown without pesticides or synthetic fertilizers. Perfect for a healthy snack or a delicious addition to your favorite recipes.',
+            'Bursting with flavor and nutrients, our hand-picked strawberries are grown on local farms using sustainable practices. Enjoy them fresh, in desserts, or as a nutritious snack.',
+            'Our carrots are harvested at their peak freshness to ensure natural sweetness and crisp texture. Free from artificial additives, they’re perfect for salads, snacks, and cooking.',
+            'Packed with vitamins and minerals, our organic kale is harvested fresh and free from harmful chemicals. Great for salads, smoothies, and healthy side dishes.',
+            'These ripe, juicy tomatoes are grown using organic farming methods to ensure the best flavor and quality. Ideal for salads, sauces, and sandwiches.'
+        ];
+
+        let index = 0;
+
+        function updateContent() {
+            document.getElementById('title').textContent = titles[index];
+            document.getElementById('description').textContent = descriptions[index];
+
+            index = (index + 1) % titles.length;
+        }
+
+        // Initial call to display content
+        updateContent();
+
+        // Update content every 5 seconds
+        setInterval(updateContent, 5000);
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% block title %}Our Services{% endblock %}
+{% block content %}
+
+<!-- Internal CSS for Services Page -->
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        background-color: #333;
+        padding: 10px 0;
+    }
+
+    nav ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+
+    nav ul li {
+        display: inline;
+        margin-right: 20px;
+    }
+
+    nav ul li a {
+        color: white;
+        text-decoration: none;
+        font-size: 18px;
+        padding: 10px 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    nav ul li a:hover {
+        background-color: #575757;
+        border-radius: 5px;
+    }
+
+    h2 {
+        font-size: 32px;
+        color: #333;
+        margin-top: 40px;
+        text-align: center;
+    }
+
+    p {
+        text-align: center;
+        font-size: 18px;
+        color: #666;
+    }
+
+    ul {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 0;
+        list-style-type: none;
+        text-align: center;
+    }
+
+    ul li {
+        background-color: #007bff;
+        color: white;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        transition: transform 0.3s ease;
+    }
+
+    ul li:hover {
+        transform: scale(1.05);
+    }
+
+    /* Responsive design for smaller screens */
+    @media (max-width: 600px) {
+        nav ul li {
+            display: block;
+            margin: 10px 0;
+        }
+
+        ul {
+            width: 100%;
+            padding: 0;
+        }
+
+        h2 {
+            font-size: 28px;
+        }
+
+        p, ul li {
+            font-size: 16px;
+        }
+    }
+</style>
+
+<header>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('about') }}">About</a></li>
+            <li><a href="{{ url_for('services') }}">Services</a></li>
+            <li><a href="{{ url_for('feedback') }}">Feedback</a></li>
+            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            {% if 'role' in session and session['role'] == 'admin' %}
+            <li><a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
+
+<h2>Our Services</h2>
+<p>We offer a range of services to enhance your shopping experience:</p>
+<ul>
+    <li>Free Delivery on Orders Above $50</li>
+    <li>24/7 Customer Support</li>
+    <li>Easy Returns and Exchanges</li>
+    <li>Product Customization Options</li>
+</ul>
+<form action="{{ url_for('logout') }}" method="POST" style="display:inline;">
+    <button type="submit">Logout</button>
+</form>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+{% endblock %}

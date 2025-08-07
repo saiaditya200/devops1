@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+
+<!-- Internal CSS for styling -->
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-image: url('{{ url_for('static', filename='login_background.jpg') }}');
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+        color: #fff;
+    }
+
+    h2 {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 32px;
+        color: #fff;
+    }
+
+    form {
+        background-color: rgba(0, 0, 0, 0.6);
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        margin-top: 20px;
+    }
+
+    label {
+        font-size: 18px;
+        color: #fff;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"], input[type="password"] {
+        padding: 10px;
+        margin-bottom: 15px;
+        width: 100%;
+        border-radius: 5px;
+        border: none;
+    }
+
+    button {
+        padding: 10px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #218838;
+    }
+
+</style>
+
+<h2>Login</h2>
+<form method="POST" action="{{ url_for('login') }}">
+    <label for="username">Username:</label>
+    <input type="text" name="username" required><br><br>
+
+    <label for="password">Password:</label>
+    <input type="password" name="password" required><br><br>
+
+    <button type="submit">Login</button>
+</form>
+<form action="{{ url_for('logout') }}" method="POST" style="display:inline;">
+    <button type="submit">Logout</button>
+</form>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+{% endblock %}

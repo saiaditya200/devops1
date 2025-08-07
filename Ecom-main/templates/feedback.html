@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Feedback</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+
+        label {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Optional: Add responsiveness */
+        @media (max-width: 600px) {
+            form {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>Submit Feedback</h2>
+    <form method="POST" action="{{ url_for('feedback') }}">
+        <label for="product">Product:</label>
+        <select name="product_id" required>
+            {% for product in products %}
+                <option value="{{ product._id }}">{{ product.product_name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="feedback">Feedback:</label>
+        <textarea name="feedback" rows="4" required></textarea><br><br>
+
+        <label for="rating">Rating:</label>
+        <select name="rating" required>
+            <option value="1">1 Star</option>
+            <option value="2">2 Stars</option>
+            <option value="3">3 Stars</option>
+            <option value="4">4 Stars</option>
+            <option value="5">5 Stars</option>
+        </select><br><br>
+
+        <label for="name">Name:</label>
+        <input type="text" name="name" required><br><br>
+
+        <label for="contact">Contact:</label>
+        <input type="text" name="contact" required><br><br>
+
+        <label for="address">Address:</label>
+        <textarea name="address" rows="4" required></textarea><br><br>
+
+        <button type="submit">Submit Feedback</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Optional JavaScript for form validation or interactions
+
+            const form = document.querySelector('form');
+
+            form.addEventListener('submit', function(event) {
+                // Example: Validate that all fields are filled
+                const inputs = form.querySelectorAll('input, textarea, select');
+                let isValid = true;
+
+                inputs.forEach(input => {
+                    if (!input.value) {
+                        isValid = false;
+                        input.style.borderColor = 'red';
+                    } else {
+                        input.style.borderColor = '#ddd';
+                    }
+                });
+
+                if (!isValid) {
+                    alert('Please fill in all required fields.');
+                    event.preventDefault(); // Prevent form submission
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        h2 {
+            color: #444;
+            margin-top: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        td {
+            vertical-align: middle;
+        }
+
+        table thead tr {
+            background-color: #007bff;
+            color: white;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        img {
+            max-width: 100px;
+            height: auto;
+        }
+
+        .actions a {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .actions a:hover {
+            color: black;
+        }
+
+        .actions form {
+            display: inline;
+        }
+
+        .actions button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .actions button:hover {
+            background-color: #c82333;
+        }
+
+        @media (max-width: 768px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+
+            th {
+                background-color: #007bff;
+                color: white;
+                position: sticky;
+                top: 0;
+                z-index: 1;
+            }
+
+            tr {
+                margin-bottom: 10px;
+            }
+
+            td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                text-align: left;
+                font-weight: bold;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+
+    <a href="{{ url_for('add_product') }}">Add Product</a>
+
+    <h2>Products</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Quality</th>
+                <th>Price</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.category }}</td>
+                <td>{{ product.product_name }}</td>
+                <td>{{ product.quantity }}</td>
+                <td>{{ product.quality }}</td>
+                <td>${{ product.price }}</td>
+                <td><img src="{{ product.image_url }}" alt="Product Image" /></td>
+                <td class="actions">
+                    <a href="{{ url_for('edit_product', product_id=product._id) }}">Edit</a>
+                    <form action="{{ url_for('delete_product', product_id=product._id) }}" method="POST" style="display:inline;">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Feedbacks</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Product ID</th>
+                <th>Feedback</th>
+                <th>Rating</th>
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Address</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for feedback in feedbacks %}
+            <tr>
+                <td>{{ feedback.product_id }}</td>
+                <td>{{ feedback.feedback }}</td>
+                <td>{{ feedback.rating }}</td>
+                <td>{{ feedback.name }}</td>
+                <td>{{ feedback.contact }}</td>
+                <td>{{ feedback.address }}</td>
+                <td class="actions">
+                    <form action="{{ url_for('delete_feedback', feedback_id=feedback._id) }}" method="POST" style="display:inline;">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

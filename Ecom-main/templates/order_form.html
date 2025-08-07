@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% block title %}Product Details{% endblock %}
+{% block content %}
+
+<!-- Internal CSS for styling the product details page -->
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    h2 {
+        font-size: 28px;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    img {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+
+    p {
+        font-size: 16px;
+        color: #555;
+    }
+
+    h3 {
+        font-size: 24px;
+        margin-top: 30px;
+        color: #333;
+    }
+
+    form {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 500px;
+        margin-top: 20px;
+    }
+
+    label {
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="file"],
+    textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    input[readonly] {
+        background-color: #f0f0f0;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background-color: #218838;
+    }
+
+    /* Hide the image container by default */
+    .hidden {
+        display: none;
+    }
+
+    /* Style the button */
+    #toggleButton {
+        border: none;
+        background: none;
+        cursor: pointer;
+        padding: 0;
+        outline: none;
+        display: inline-block;
+    }
+
+    /* Style the toggle image */
+    #toggleImage {
+        max-width: 100px;
+        height: auto;
+        display: block;
+    }
+
+    #imageContainer {
+        margin-top: 20px;
+    }
+
+    /* Style for the scanner container */
+    #scannerContainer {
+        margin-top: 20px;
+        text-align: center;
+    }
+</style>
+
+<h2>{{ product.product_name }}</h2>
+{% if product.image_url %}
+    <img src="{{ product.image_url }}" alt="{{ product.product_name }}" style="width:300px;height:300px;">
+{% else %}
+    <p>No image available.</p>
+{% endif %}
+<p>Category: {{ product.category }}</p>
+<p>Quantity: {{ product.quantity }}</p>
+<p>Quality: {{ product.quality }}</p>
+<p>Price: ${{ product.price }}</p>
+
+<h3>Order Product</h3>
+<form method="POST" action="{{ url_for('order_product', product_id=product._id) }}" enctype="multipart/form-data">
+    <label for="name">Name:</label>
+    <input type="text" name="name" required><br><br>
+
+    <label for="contact">Contact:</label>
+    <input type="text" name="contact" required><br><br>
+
+    <label for="address">Address:</label>
+    <textarea name="address" rows="4" required></textarea><br><br>
+
+    <label for="quantity">Quantity:</label>
+    <input type="number" name="quantity" min="1" max="{{ product.quantity }}" required><br><br>
+
+    <label for="quality">Quality:</label>
+    <input type="text" name="quality" value="{{ product.quality }}" readonly><br><br>
+
+    <label for="price">Price per item:</label>
+    <input type="text" name="price" value="${{ product.price }}" readonly><br><br>
+
+    <button id="toggleButton">
+        <img src="{{ url_for('static', filename='images/obulscan.jpg') }}" alt="Toggle Image Button">
+    </button>
+    <div id="imageContainer" class="hidden">
+        <img id="toggleImage" src="{{ url_for('static', filename='images/obulscan.jpg') }}" alt="Small Image">
+    </div>
+
+    <!-- Scanner Section -->
+    <div id="scannerContainer">
+        <button id="scannerButton" type="button">
+            <img src="{{ url_for('static', filename='images/obulscan.jpg') }}" alt="Scanner Image">
+        </button>
+        <div id="qrScanner" style="display: none;"></div>
+    </div>
+
+    <label for="qr_code">Upload QR Code:</label>
+    <input type="file" name="qr_code" accept="image/*"><br><br>
+
+    <button type="submit">Place Order</button>
+</form>
+
+<!-- JavaScript for scanner functionality -->
+<script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle toggle button click to show/hide the image container
+        const toggleButton = document.getElementById('toggleButton');
+        const imageContainer = document.getElementById('imageContainer');
+
+        toggleButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            if (imageContainer.classList.contains('hidden')) {
+                imageContainer.classList.remove('hidden');
+            } else {
+                imageContainer.classList.add('hidden');
+            }
+        });
+
+        // Handle scanner button click to initialize QR code scanner
+        const scannerButton = document.getElementById('scannerButton');
+        const qrScanner = document.getElementById('qrScanner');
+
+        scannerButton.addEventListener('click', function() {
+            if (qrScanner.style.display === 'none') {
+                qrScanner.style.display = 'block';
+                const html5QrCode = new Html5Qrcode("qrScanner");
+                html5QrCode.start(
+                    { facingMode: "environment" }, 
+                    {
+                        fps: 10, 
+                        qrbox: 250
+                    },
+                    (decodedText, decodedResult) => {
+                        alert('QR Code Scanned: ' + decodedText);
+                        html5QrCode.stop().then(() => {
+                            qrScanner.style.display = 'none';
+                        }).catch((err) => {
+                            console.log('Error stopping QR code scanner:', err);
+                        });
+                    },
+                    (errorMessage) => {
+                        console.log('QR code scanning error:', errorMessage);
+                    }
+                ).catch((err) => {
+                    console.log('Error starting QR code scanner:', err);
+                });
+            } else {
+                qrScanner.style.display = 'none';
+                Html5Qrcode.getCameras().then(devices => {
+                    if (devices && devices.length) {
+                        html5QrCode.stop();
+                    }
+                }).catch(err => {
+                    console.log('Error getting cameras:', err);
+                });
+            }
+        });
+    });
+</script>
+
+{% endblock %}

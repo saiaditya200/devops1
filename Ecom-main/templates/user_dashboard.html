@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Feedback</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background-color: #575757;
+            border-radius: 5px;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 32px;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 0;
+            list-style-type: none;
+            margin: 20px;
+        }
+
+        ul li {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 22%;
+            margin: 15px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        ul li:hover {
+            transform: scale(1.05);
+        }
+
+        ul li img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+
+        ul li h3 {
+            font-size: 20px;
+            color: #333;
+        }
+
+        ul li p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        ul li a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        ul li a:hover {
+            background-color: #0056b3;
+        }
+
+        /* Responsive design for smaller screens */
+        @media (max-width: 768px) {
+            ul li {
+                width: 45%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            ul li {
+                width: 100%;
+            }
+        }
+
+        /* Feedback Form Styles */
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        form label {
+            display: block;
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        form input[type="text"],
+        form textarea,
+        form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        form textarea {
+            resize: none;
+        }
+
+        form button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Logout Button */
+        form.logout-button {
+            display: inline;
+            margin: 20px auto;
+        }
+
+        form.logout-button button {
+            width: auto;
+            padding: 10px 20px;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+        }
+
+        form.logout-button button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('services') }}">Services</a></li>
+                <li><a href="{{ url_for('feedback') }}">Give Feedback</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                {% if 'role' in session and session['role'] == 'admin' %}
+                <li><a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <h2>Available Products</h2>
+    <ul>
+        {% for product in products %}
+        <li>
+            {% if product.image_url %}
+                <img src="{{ product.image_url }}" alt="{{ product.product_name }}">
+            {% else %}
+                <img src="{{ url_for('static', filename='default_image.png') }}" alt="Default Image">
+            {% endif %}
+            <h3>{{ product.product_name }}</h3>
+            <p>Category: {{ product.category }}</p>
+            <p>Quantity: {{ product.quantity }}</p>
+            <p>Quality: {{ product.quality }}</p>
+            <p>Price: ${{ product.price }}</p>
+            <a href="{{ url_for('view_product', product_id=product._id) }}">View Details</a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <form action="{{ url_for('logout') }}" method="POST" class="logout-button">
+        <button type="submit">Logout</button>
+    </form>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
